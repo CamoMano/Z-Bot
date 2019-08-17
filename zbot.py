@@ -1,5 +1,6 @@
 import discord
 import asyncio
+import feedparser
 
 
 async def on_message(message):
@@ -16,7 +17,7 @@ client = MyClient()
 
 @client.event
 async def on_message(message):
-    # we do not want the bot to reply to itself
+    # Stops the bot from replying to itself
     if message.author == client.user:
         return
 
@@ -48,6 +49,16 @@ async def on_message(message):
         
         ~contact    Gives contact information
         ```'''.format(message)
+        await message.channel.send(msg)
+
+    # Gets the latest devblog from the sites RSS feed
+    if message.content.startswith('~devblog'):
+        zgame_rss = "http://www.playzgame.net/feed/"
+
+        feed = feedparser.parse(zgame_rss)
+
+        request = feed.entries[0]['link']
+        msg = request.format(message)
         await message.channel.send(msg)
 
 
