@@ -48,14 +48,16 @@ async def on_message(message):
         ~buy        Links to the Steam page
         
         ~contact    Gives contact information
+        
+        ~devblog    Links to the latest devblog
         ```'''.format(message)
         await message.channel.send(msg)
 
     # Gets the latest devblog from the sites RSS feed
     if message.content.startswith('~devblog'):
-        zgame_rss = "http://www.playzgame.net/feed/"
+        site_rss = "http://www.playzgame.net/feed/"
 
-        feed = feedparser.parse(zgame_rss)
+        feed = feedparser.parse(site_rss)
 
         request = feed.entries[0]['link']
         msg = request.format(message)
