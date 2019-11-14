@@ -26,7 +26,7 @@ async def on_message(message):
         await message.channel.send(msg)
 
     if message.content.startswith('~site'):
-        msg = 'https://www.playzgame.net'.format(message)
+        msg = 'https://z.ridgelinestds.com'.format(message)
         await message.channel.send(msg)
 
     if message.content.startswith('~buy'):
