@@ -34,7 +34,7 @@ async def on_message(message):
         await message.channel.send(msg)
 
     if message.content.startswith('~contact'):
-        msg = 'contact@ridgelinestds.net'.format(message)
+        msg = 'contact@ridgelinestds.com'.format(message)
         await message.channel.send(msg)
 
     if message.content.startswith('~help'):
@@ -55,7 +55,7 @@ async def on_message(message):
 
     # Gets the latest devblog from the sites RSS feed
     if message.content.startswith('~devblog'):
-        site_rss = "http://www.playzgame.net/feed/"
+        site_rss = "http://z.ridgelinestds.com/feed"
 
         feed = feedparser.parse(site_rss)
 
