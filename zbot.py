@@ -5,6 +5,7 @@ from discord.ext import commands
 from discord.ext.commands import Bot
 
 bot = commands.Bot(command_prefix='~')
+#Removes the default help command in favor of a custom one
 bot.remove_command('help')
 
 
