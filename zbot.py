@@ -1,47 +1,55 @@
 import discord
 import asyncio
 import feedparser
+from discord.ext import commands
+from discord.ext.commands import Bot
+
+bot = commands.Bot(command_prefix='~')
+bot.remove_command('help')
 
 
-async def on_message(message):
-    print('Message from {0.author}: {0.content}'.format(message))
+@bot.event
+async def on_ready():
+    print("--------------------")
+    print("Successfully logged in as")
+    print(bot.user)
+    print("--------------------")
 
 
-class MyClient(discord.Client):
-    async def on_ready(self):
-        print('Logged on as {0}!'.format(self.user))
-
-
-client = MyClient()
-
-
-@client.event
-async def on_message(message):
+async def on_message(self, message):
     # Stops the bot from replying to itself
-    if message.author == client.user:
+    if message.author == self.user:
         return
 
-    if message.content.startswith('~info'):
-        msg = '```Author: CamoMano```'.format(message)
-        await message.channel.send(msg)
 
-    if message.content.startswith('~site'):
-        msg = 'https://z.ridgelinestds.com'.format(message)
-        await message.channel.send(msg)
+@bot.command()
+async def info(ctx):
+    await ctx.send('```Author: CamoMano```')
 
-    if message.content.startswith('~buy'):
-        msg = 'https://store.steampowered.com/app/786770/Z_The_End/'.format(message)
-        await message.channel.send(msg)
 
-    if message.content.startswith('~contact'):
-        msg = 'contact@ridgelinestds.com'.format(message)
         await message.channel.send(msg)
+@bot.command()
+async def site(ctx):
+    await ctx.send('https://z.ridgelinestds.com')
 
-    if message.content.startswith('~help'):
-        msg = '''```
+
+@bot.command()
+async def buy(ctx):
+    await ctx.send('https://store.steampowered.com/app/786770/Z_The_End/')
+
+
+@bot.command()
+async def contact(ctx):
+    await ctx.send('contact@ridgelinestds.com')
+
+
+@bot.command()
+async def help(ctx):
+    await ctx.send(
+        '''```
         ~help       Shows this message
         
-        ~info       Shows information about the bot
+        ~info       Gives information about the bot
         
         ~site       Links to the website
         
@@ -50,18 +58,15 @@ async def on_message(message):
         ~contact    Gives contact information
         
         ~devblog    Links to the latest devblog
-        ```'''.format(message)
-        await message.channel.send(msg)
-
-    # Gets the latest devblog from the sites RSS feed
-    if message.content.startswith('~devblog'):
-        site_rss = "http://z.ridgelinestds.com/feed"
-
-        feed = feedparser.parse(site_rss)
-
-        request = feed.entries[0]['link']
-        msg = request.format(message)
-        await message.channel.send(msg)
+        ```''')
 
 
-client.run('yourkeyhere')
+@bot.command()
+async def devblog(ctx):
+    site_rss = "http://z.ridgelinestds.com/feed"
+    feed = feedparser.parse(site_rss)
+    request = feed.entries[0]['link']
+    await ctx.send(request)
+
+
+bot.run('yourkeyhere')
