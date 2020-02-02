@@ -27,7 +27,6 @@ async def info(ctx):
     await ctx.send('```Author: CamoMano```')
 
 
-        await message.channel.send(msg)
 @bot.command()
 async def site(ctx):
     await ctx.send('https://z.ridgelinestds.com')
