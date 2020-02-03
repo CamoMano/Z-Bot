@@ -1,14 +1,22 @@
+"""
+Python Discord Bot(Z-Bot)
+Developer: CamoMano
+This is a simple Discord bot written in Python 3.7
+"""
+
+
 import discord
 import asyncio
 import feedparser
 from discord.ext import commands
 from discord.ext.commands import Bot
 
+# Sets the command prefix
 bot = commands.Bot(command_prefix='~')
-#Removes the default help command in favor of a custom one
+# Removes the default help command in favor of a custom one
 bot.remove_command('help')
 
-
+# Shows that the bot has logged in
 @bot.event
 async def on_ready():
     print("--------------------")
@@ -17,15 +25,15 @@ async def on_ready():
     print("--------------------")
 
 
+# Stops the bot from replying to itself
 async def on_message(self, message):
-    # Stops the bot from replying to itself
     if message.author == self.user:
         return
 
 
 @bot.command()
 async def info(ctx):
-    await ctx.send('```Author: CamoMano```')
+    await ctx.send('```Developer: CamoMano```')
 
 
 @bot.command()
@@ -68,5 +76,13 @@ async def devblog(ctx):
     request = feed.entries[0]['link']
     await ctx.send(request)
 
+""" 
+# Blank command example with explanations
+@bot.command()
+# Change 'command' to whatever you want to command to be
+async def command(ctx):
+# Input what the bot should respond with
+    await ctx.send('Put response here')
+"""
 
 bot.run('yourkeyhere')
