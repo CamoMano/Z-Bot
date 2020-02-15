@@ -6,10 +6,8 @@ This is a simple Discord bot written in Python 3.7
 
 
 import discord
-import asyncio
 import feedparser
 from discord.ext import commands
-from discord.ext.commands import Bot
 
 # Sets the command prefix
 bot = commands.Bot(command_prefix='~')
@@ -21,7 +19,8 @@ bot.remove_command('help')
 async def on_ready():
     print("--------------------")
     print("Successfully logged in as")
-    print(bot.user)
+    print(bot.user.name)
+    print(bot.user.id)
     print("--------------------")
 
 
