@@ -4,7 +4,6 @@ Developer: CamoMano
 This is a simple Discord bot written in Python 3.7
 """
 
-
 import discord
 import feedparser
 from discord.ext import commands
@@ -14,6 +13,7 @@ bot = commands.Bot(command_prefix='~')
 # Removes the default help command in favor of a custom one
 bot.remove_command('help')
 
+
 # Shows that the bot has logged in
 @bot.event
 async def on_ready():
@@ -22,6 +22,9 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print("--------------------")
+
+
+run = 1
 
 
 # Stops the bot from replying to itself
@@ -75,6 +78,7 @@ async def devblog(ctx):
     request = feed.entries[0]['link']
     await ctx.send(request)
 
+
 """ 
 # Blank command example with explanations
 @bot.command()
@@ -85,3 +89,16 @@ async def command(ctx):
 """
 
 bot.run('yourkeyhere')
+
+
+def internal():
+    command = input()
+    if command.lower() == "status":
+        print(bot.user.name)
+        print(bot.user.id)
+    elif command.lower() == "exit":
+        exit()
+
+
+if run == 1:
+    internal()
