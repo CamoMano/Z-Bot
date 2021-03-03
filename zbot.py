@@ -13,6 +13,15 @@ client = commands.Bot(command_prefix='~')
 # Removes the default help command in favor of a custom one
 client.remove_command('help')
 
+# Opens key.txt where the bot key is stored
+keyfile = open("key.txt", "r")
+
+# Reads the file and sets the key
+key = keyfile.read()
+
+# Closes the file
+keyfile.close()
+
 
 # Shows that the bot has logged in
 @client.event
@@ -85,11 +94,13 @@ async def devblog(ctx):
 """ 
 # Blank command example with explanations
 @client.command()
+
 # Change 'command' to whatever you want to command to be
 async def command(ctx):
+
 # Input what the bot should respond with
     await ctx.send('Put response here')
     await ctx.message.delete()
 """
 
-client.run('yourkeyhere')
+client.run(key)
