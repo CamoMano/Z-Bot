@@ -4,14 +4,14 @@ Developer: CamoMano
 This is a simple Discord bot written in Python 3.7
 """
 
-import discord
 import feedparser
-from discord.ext import commands
+import discord
+from discord import Client, Intents, Embed
+from discord_slash import SlashCommand, SlashContext
 
 # Sets the command prefix
-client = commands.Bot(command_prefix='~')
-# Removes the default help command in favor of a custom one
-client.remove_command('help')
+client = Client(intents=Intents.default())
+slash = SlashCommand(client)
 
 # Opens key.txt where the bot key is stored
 keyfile = open("key.txt", "r")
@@ -31,41 +31,31 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print("--------------------")
-    await client.change_presence(activity=discord.Game(name='https://z.ridgelinestds.com/ | ~help'))
+    await client.change_presence(activity=discord.Game(name='https://z.ridgelinestds.com/ | /help'))
 
 
-# Stops the bot from replying to itself
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-
-@client.command()
-async def info(ctx):
+@slash.slash(name="info")
+async def info(ctx: SlashContext):
     await ctx.send('```Developer: CamoMano```')
-    await ctx.message.delete()
 
 
-@client.command()
-async def site(ctx):
+@slash.slash(name="site")
+async def site(ctx: SlashContext):
     await ctx.send('https://z.ridgelinestds.com')
-    await ctx.message.delete()
 
 
-@client.command()
-async def buy(ctx):
+@slash.slash(name="buy")
+async def buy(ctx: SlashContext):
     await ctx.send('https://store.steampowered.com/app/786770/Z_The_End/')
-    await ctx.message.delete()
 
 
-@client.command()
-async def contact(ctx):
+@slash.slash(name="contact")
+async def contact(ctx: SlashContext):
     await ctx.send('contact@ridgelinestds.com')
-    await ctx.message.delete()
 
 
-@client.command()
-async def help(ctx):
+@slash.slash(name="help")
+async def help(ctx: SlashContext):
     await ctx.send(
         '''```
         ~help       Shows this message
@@ -80,16 +70,14 @@ async def help(ctx):
         
         ~devblog    Links to the latest devblog
         ```''')
-    await ctx.message.delete()
 
 
-@client.command()
-async def devblog(ctx):
+@slash.slash(name="devblog")
+async def devblog(ctx: SlashContext):
     site_rss = "http://z.ridgelinestds.com/feed"
     feed = feedparser.parse(site_rss)
     request = feed.entries[0]['link']
     await ctx.send(request)
-    await ctx.message.delete()
 
 
 """ 
