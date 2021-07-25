@@ -4,14 +4,14 @@ Developer: CamoMano
 This is a simple Discord bot written in Python 3.7
 """
 
-import discord
 import feedparser
-from discord.ext import commands
+import discord
+from discord import Client, Intents, Embed
+from discord_slash import SlashCommand, SlashContext
 
 # Sets the command prefix
-client = commands.Bot(command_prefix='~')
-# Removes the default help command in favor of a custom one
-client.remove_command('help')
+client = discord.Client(intents=Intents.default())
+slash = SlashCommand(client, sync_commands=True)
 
 # Opens key.txt where the bot key is stored
 keyfile = open("key.txt", "r")
@@ -31,76 +31,60 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print("--------------------")
+    await client.change_presence(activity=discord.Game(name='https://z.ridgelinestds.com/ | /help'))
 
 
-# Stops the bot from replying to itself
-async def on_message(message):
-    if message.author == client.user:
-        return
+guild_ids = [303997280560742400]
 
 
-@client.command()
-async def info(ctx):
-    await ctx.send('```Developer: CamoMano```')
-    await ctx.message.delete()
-
-
-@client.command()
-async def site(ctx):
+@slash.slash(name="site", guild_ids=guild_ids, description="Provides a link to the website.")
+async def site(ctx: SlashContext):
     await ctx.send('https://z.ridgelinestds.com')
-    await ctx.message.delete()
 
 
-@client.command()
-async def buy(ctx):
+@slash.slash(name="buy", guild_ids=guild_ids, description="Provides a link to the Steam page.")
+async def buy(ctx: SlashContext):
     await ctx.send('https://store.steampowered.com/app/786770/Z_The_End/')
-    await ctx.message.delete()
 
 
-@client.command()
-async def contact(ctx):
+@slash.slash(name="contact", guild_ids=guild_ids)
+async def contact(ctx: SlashContext):
     await ctx.send('contact@ridgelinestds.com')
-    await ctx.message.delete()
 
 
-@client.command()
-async def help(ctx):
+@slash.slash(name="help", guild_ids=guild_ids, description="Lists all commands.")
+async def help(ctx: SlashContext):
     await ctx.send(
         '''```
-        ~help       Shows this message
+        /help       Shows this message
         
-        ~info       Gives information about the bot
+        /site       Links to the website
         
-        ~site       Links to the website
+        /buy        Links to the Steam page
         
-        ~buy        Links to the Steam page
+        /contact    Gives contact information
         
-        ~contact    Gives contact information
-        
-        ~devblog    Links to the latest devblog
+        /devblog    Links to the latest devblog
         ```''')
-    await ctx.message.delete()
 
 
-@client.command()
-async def devblog(ctx):
+@slash.slash(name="devblog", guild_ids=guild_ids, description="Fetches the latest Devblog.")
+async def devblog(ctx: SlashContext):
     site_rss = "http://z.ridgelinestds.com/feed"
     feed = feedparser.parse(site_rss)
     request = feed.entries[0]['link']
     await ctx.send(request)
-    await ctx.message.delete()
 
 
 """ 
 # Blank command example with explanations
-@client.command()
+@slash.slash()
 
 # Change 'command' to whatever you want to command to be
-async def command(ctx):
+async def command(ctx: SlashContext):
 
 # Input what the bot should respond with
     await ctx.send('Put response here')
-    await ctx.message.delete()
 """
 
 client.run(key)
